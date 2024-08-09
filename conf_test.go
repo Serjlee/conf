@@ -1067,6 +1067,14 @@ func TestYAML(t *testing.T) {
 			&yamlConfig2{},
 			&yamlConfig2{A: "FlagEasy!", B: internal{RenamedC: 2, D: []int{3, 4}}, E: "postgres", C: ts, D: ts},
 		},
+		{
+			"just yaml",
+			[]byte(yamlData2),
+			nil,
+			nil,
+			&yamlConfig2{},
+			&yamlConfig2{A: "Easy!", B: internal{RenamedC: 2, D: []int{3, 4}}, E: "postgres", C: ts, D: ts},
+		},
 	}
 
 	t.Log("Given the need to parse basic yaml configuration.")
