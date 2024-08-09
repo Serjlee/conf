@@ -1012,6 +1012,14 @@ c: 2000-01-01T10:17:00Z
 d: jack
 `
 
+var yamlData3 = `
+a: Easy!
+b:
+  c: 2
+  d: [3, 4]
+c: 2000-01-01T10:17:00Z
+`
+
 type internal struct {
 	RenamedC int   `yaml:"c"`
 	D        []int `yaml:",flow"`
@@ -1030,6 +1038,13 @@ type yamlConfig2 struct {
 	E string    `conf:"default:postgres"`
 	C time.Time `conf:"default:2023-06-16T10:17:00Z"`
 	D string    `conf:"required"`
+}
+
+type yamlConfig3 struct {
+	A string
+	B internal
+	E string    `conf:"default:postgres"`
+	C time.Time `conf:"required"`
 }
 
 func TestYAML(t *testing.T) {
@@ -1066,6 +1081,14 @@ func TestYAML(t *testing.T) {
 			[]string{"conf.test", "--a", "FlagEasy!", "--d", "bill"},
 			&yamlConfig2{},
 			&yamlConfig2{A: "FlagEasy!", B: internal{RenamedC: 2, D: []int{3, 4}}, E: "postgres", C: ts, D: "bill"},
+		},
+		{
+			"required struct",
+			[]byte(yamlData3),
+			nil,
+			nil,
+			&yamlConfig3{},
+			&yamlConfig3{A: "Easy!", B: internal{RenamedC: 2, D: []int{3, 4}}, E: "postgres", C: ts},
 		},
 	}
 
