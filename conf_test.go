@@ -1032,6 +1032,13 @@ type yamlConfig2 struct {
 	D time.Time `conf:"required"`
 }
 
+type yamlConfig3 struct {
+	A string `conf:"required"`
+	B internal
+	E string    `conf:"default:postgres"`
+	C time.Time `conf:"default:2023-06-16T10:17:00Z"`
+}
+
 func TestYAML(t *testing.T) {
 	ts, _ := time.Parse(time.RFC3339, "2000-01-01T10:17:00Z")
 
@@ -1068,12 +1075,20 @@ func TestYAML(t *testing.T) {
 			&yamlConfig2{A: "FlagEasy!", B: internal{RenamedC: 2, D: []int{3, 4}}, E: "postgres", C: ts, D: ts},
 		},
 		{
-			"just yaml",
+			"just yaml, required time.Time",
 			[]byte(yamlData2),
 			nil,
 			nil,
 			&yamlConfig2{},
 			&yamlConfig2{A: "Easy!", B: internal{RenamedC: 2, D: []int{3, 4}}, E: "postgres", C: ts, D: ts},
+		},
+		{
+			"just yaml, required string",
+			[]byte(yamlData1),
+			nil,
+			nil,
+			&yamlConfig3{},
+			&yamlConfig3{A: "Easy!", B: internal{RenamedC: 2, D: []int{3, 4}}, E: "postgres", C: ts},
 		},
 	}
 
